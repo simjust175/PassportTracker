@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column">
     <snack-bar banner="true" color="success" label="Document Successfully added"/>
-    <v-card class="py-2 px-1 rounded-6 elevation-5">
+    <v-card class="rounded-6 elevation-5 mt-8">
       <main-page />
     </v-card>
     <div class="mt-4 d-flex align-center justify-center">

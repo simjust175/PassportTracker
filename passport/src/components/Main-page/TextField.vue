@@ -15,8 +15,9 @@ const rules = computed(() =>
   [value => !!value || 'Required field']
 );
 const emit = defineEmits(["selection"])
+const capitalize = (str)=> str.charAt(0).toUpperCase() + str.slice(1);
 const name = ref("")
-watch(name, (newVal)=> {emit("selection", newVal)})
+watch(name, (newVal)=> {emit("selection", capitalize(newVal))})
 </script>
 
 <style>

@@ -1,5 +1,5 @@
 <template>
-    <v-btn prepend-icon="mdi-plus" color="primary" :loading="props.loadingState" size="large" block>Add {{ props.checkedInfo.type }}</v-btn>
+    <v-btn append-icon="mdi-send-outline" variant="flat" color="success" :loading="props.loadingState"> Confirm & Send</v-btn>
 </template>
 
 <script setup>
@@ -18,12 +18,12 @@ watch(() => props.loadingState, (newVal) => {
 
 const validateInfo = () => {
     let info = {...props.checkedInfo}
-    const values = Object.values(info);
+    // const values = Object.values(info);
     //console.log("INFO INFO INFO", info);
     // const isValid = values.slice(0, -1).every(value => value && value !== '');
     // if (!isValid) return null
-    const { surname, first_name, middle } = info.user_name;
-    info.user_name = `${surname} ${first_name}${middle ? middle : ''}`;
+    // const { surname, first_name, middle } = info.user_name;
+    // info.user_name = `${surname} ${first_name}${middle ? middle : ''}`;
     //console.log("in the object", p);
     postInfo(info)
 }
