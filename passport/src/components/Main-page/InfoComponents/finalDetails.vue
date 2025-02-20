@@ -1,18 +1,25 @@
 <template>
     <v-sheet class="pa-4" elevation="2" rounded>
         <v-simple-table>
-            <tbody>
-                <tr v-for="(value, key) in userInfo" :key="key">
-                    <div class="d-flex justify-space-between" min-width="1200"  v-if="value">
-                        <td class="text-subtitle-1 font-weight-medium">{{ enhanceText(key) }}</td>
-                        <td class="text-body-1">{{ value }}</td>
-                        <td>
-                            <v-icon @click="editItem(key)" color="primary" class="cursor-pointer"
-                                style="font-size: 24px">
-                                mdi-pencil
-                            </v-icon>
-                        </td>
-                    </div>
+            <tbody id="tbody">
+                <tr v-for="(value, key) in userInfo" :key="key" class="border-b-lg">
+                    <td v-if="value" class="d-flex justify-space-between">
+                        <div>
+                            <span class="text-subtitle-1 font-weight-medium">{{ enhanceText(key) }}</span>
+                            <p class="text-body-1">{{ value }}</p>
+                        </div>
+                        <v-icon
+                            @click="editItem(key)"
+                            color="primary"
+                            class="cursor-pointer"
+                            style="font-size: 24px; transition: transform 0.2s ease-in-out;"
+                            @mouseover="hoverIcon = true"
+                            @mouseleave="hoverIcon = false"
+                            :style="{ transform: hoverIcon ? 'scale(1.1)' : 'scale(1)' }"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                    </td>
                 </tr>
             </tbody>
         </v-simple-table>
@@ -26,24 +33,27 @@ const props = defineProps({
     info: Object,
 });
 
-const emit = defineEmits(["confirmed"])
+const emit = defineEmits(["confirmed"]);
 
 const userInfo = ref({});
+const hoverIcon = ref(false);
 
 const enhanceText = (txt) => {
-    if (txt.includes("_")){ txt= txt.replace("_", " ")}
-    return txt.charAt(0).toUpperCase() + txt.slice(1, txt.length)
-}
+    if (txt.includes("_")) {
+        txt = txt.replace("_", " ");
+    }
+    return txt.charAt(0).toUpperCase() + txt.slice(1);
+};
 
 watch(
     () => props.info,
     ({ user_name, document }) => {
         let { date } = document;
-        date = new Date(date).toISOString().split('T')[0];
-        document.date = date; // Fixing the date format
+        date = new Date(date).toISOString().split('T')[0]; // Fix date format
+        document.date = date;
         userInfo.value = { ...user_name, ...document };
-        console.log("confirmrd", userInfo.value);
-        emit("confirmed", userInfo.value)
+        console.log("Confirmed", userInfo.value);
+        emit("confirmed", userInfo.value);
     },
     { immediate: true }
 );
@@ -55,33 +65,31 @@ const editItem = (key) => {
 </script>
 
 <style scoped>
-/* Style for the sheet container */
-.pa-4 {
-    padding: 20px;
-}
-
-/* Add subtle borders and shadow to give a card-like feel */
+/* Table and overall sheet styling */
 .v-sheet {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
-/* Header styling for the table */
-th {
-    font-weight: bold;
-    text-align: left;
-    color: #555;
+/* Row and column structure */
+tbody#tbody {
+    width: 100%;
+    display: table;
 }
 
-/* Row styling */
-td {
-    padding: 12px;
-    border-bottom: 1px solid #f1f1f1;
-    vertical-align: middle;
+tr {
+    border-bottom: 1px solid #E0E0E0;
+    transition: background-color 0.3s ease;
 }
 
-/* Text color and font size adjustments */
+/* Row hover effect */
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Text styling */
 .text-subtitle-1 {
     color: #333;
     font-size: 16px;
@@ -90,23 +98,24 @@ td {
 .text-body-1 {
     color: #555;
     font-size: 14px;
+    margin: 0;
 }
 
-/* Icon styling with hover effect */
+/* Padding and layout of each cell */
+td {
+    padding: 12px 16px;
+    vertical-align: middle;
+}
+
+/* Icon styling */
 .v-icon {
+    cursor: pointer;
+    font-size: 24px;
     transition: transform 0.2s ease-in-out;
 }
 
+/* Icon hover effect */
 .v-icon:hover {
     transform: scale(1.1);
 }
-
-/* Add hover effect for rows */
-tr:hover {
-    background-color: #f9f9f9;
-}
 </style>
-
-
-
-<style></style>

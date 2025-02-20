@@ -1,14 +1,22 @@
 <template>
   <v-app theme="light" class="pb-0">
-     <app-bar />
-    <v-main class="d-flex align-center justify-center bg-blue-lighten-5 pa-12">
+
+    <navigation-bar />
+    <avatar-component :user="userInfo" class="align-self-end pb-0 pt-5 pr-5" />
+    <v-main class="d-flex align-center justify-center mt-10 pb-8">
       <router-view />
     </v-main>
-    <!-- <footer-comp height="2" class="pa-0 pb-0" /> -->
+    <footer-comp height="2" class="pa-0 pb-0" />
   </v-app>
 </template>
 
 <script setup>
-  //
-</script>
+import AvatarComponent from "./components/HeaderFooter/AvatarComponent.vue"
+import { ref } from "vue"
 
+const userInfo = ref({
+  user_email: "bunim175@gmail.com",
+  user_name: "simcha justman",
+})
+//
+</script>

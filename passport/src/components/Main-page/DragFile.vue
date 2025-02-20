@@ -129,7 +129,7 @@ body {
   margin: 0;
   background-color: #17141d;
   color: $secondary;
-  font-family: "DM Mono", monospace;
+  //font-family: "DM Mono", monospace;
   // width: 100%;
   // height: 100vh;
   // display: grid;

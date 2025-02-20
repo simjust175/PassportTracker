@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <v-select v-model="methodSelection" :items="props.menuItems?.items" :label="props.menuItems?.label" :rules="rules" rounded="lg"
-      variant="outlined">
+      variant="outlined" density="comfortable">
     </v-select>
   </div>
 </template>

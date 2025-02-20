@@ -9,6 +9,7 @@ import { registerPlugins } from '@/plugins'
 
 // Components
 import App from './App.vue'
+import store from "./Storage"
 
 // Composables
 import { createApp } from 'vue'
@@ -17,4 +18,6 @@ const app = createApp(App)
 
 registerPlugins(app)
 
+
+app.use(store)
 app.mount('#app')

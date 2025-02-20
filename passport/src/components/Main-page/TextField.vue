@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-text-field :label="props.label" v-model="name" variant="outlined" class="rounded-7" rounded="lg" :rules="rules"></v-text-field>
+    <v-text-field :label="props.label" v-model="name" density="comfortable" variant="outlined" class="rounded-7" rounded="lg" :rules="rules"></v-text-field>
   </div>
 </template>
 

@@ -1,4 +1,5 @@
 <template>
+    <div>
     <h2 class="text-center mb-4">Log in</h2>
     <v-form ref="formData">
         <alert-prop :alert="alertActivate" type="error" label="User name or password are incorrect" :closable="true" />
@@ -10,11 +11,13 @@
         <v-btn @click.prevent="login" class="my-4" size="large" color="purple" block>Login</v-btn>
     </v-form>
     <p>Not yet a member? <span @click="$emit('signIn')" class="cursor-pointer text-blue-darken-4">Sign up</span> </p>
+    </div>
 </template>
 
 <script setup>
 import { ref, reactive, watch, defineEmits } from "vue";
 import { useRouter } from "vue-router";
+import store from "@/storage"
 
 const alertActivate = ref(false)
 const router = useRouter()
@@ -49,6 +52,8 @@ const login = async () => {
         if (!token) return alertActivate.value = true;
         localStorage.setItem("token", token);
         localStorage.setItem("id", user_id);
+        
+    store.commit("updateLoggedStat", { loggedInStatus: true, userName: credentials.user_email })
         emit("loggedIn");
         router.push("/");
     } catch (error) {

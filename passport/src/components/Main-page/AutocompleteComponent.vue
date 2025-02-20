@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-autocomplete :label="props.menuItems.label" rounded="lg" :items="props.menuItems.items" :rules="rules" v-model="selection" variant="outlined"></v-autocomplete>
+        <v-autocomplete :label="props.menuItems.label" rounded="lg" :items="props.menuItems.items" :rules="rules" v-model="selection" variant="outlined" density="comfortable"></v-autocomplete>
     </div>
 </template>
 
