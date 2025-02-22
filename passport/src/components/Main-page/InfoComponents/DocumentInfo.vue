@@ -46,8 +46,8 @@ const documentType = ref({
         "Passport",
         "I.D. card",
         "Drivers license",
-        "Other",
-        "Visa"
+        "Visa",
+        "Other"  
     ]
 });
 

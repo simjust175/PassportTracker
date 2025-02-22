@@ -5,7 +5,7 @@
           <v-menu min-width="200px">
             <template v-slot:activator="{ props }">
               <v-btn icon v-bind="props" class="bg-green">
-                <v-avatar color="green" size="x-large">
+                <v-avatar color="green" size="x-large" elevation="8">
                   <span class="text-h6">{{ initializer(user.user_name) }}</span>
                 </v-avatar>
               </v-btn>
@@ -32,7 +32,7 @@
           </v-menu>
         </v-row>
       </v-container>
-      <v-progress-circular color="primary" indeterminate :size="49" :width="8" v-else></v-progress-circular>
+      <v-progress-circular color="success" indeterminate :size="49" :width="3" v-else></v-progress-circular>
     </div>
   </template>
   

@@ -1,5 +1,5 @@
 <template>
-  <v-app theme="light" class="pb-0">
+  <v-app theme="light" class="pb-0 bg-grey-blue">
 
     <navigation-bar />
     <avatar-component :user="userInfo" class="align-self-end pb-0 pt-5 pr-5" />
@@ -20,3 +20,9 @@ const userInfo = ref({
 })
 //
 </script>
+
+<style>
+.bg-grey-blue{
+  background-color: #F3FAFFFF !important;
+}
+</style>

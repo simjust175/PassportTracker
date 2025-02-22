@@ -1,6 +1,6 @@
 <template>
     <div>
-    <h2 class="text-center mb-4">Log in</h2>
+    <h2 class="text-center mb-4">Welcome back.</h2>
     <v-form ref="formData">
         <alert-prop :alert="alertActivate" type="error" label="User name or password are incorrect" :closable="true" />
         <alert-prop label="Email must be provided" type="error" :alert="toggleAlert" />
@@ -8,9 +8,9 @@
 
         <p @click="emitForgot" class="cursor-pointer text-blue-darken-4 text-body-2 text-right">Forgot password?</p>
         <register-input label="Enter Pwd" type="pwd" @input="credentials.pwd = $event" v-model="credentials.pwd" />
-        <v-btn @click.prevent="login" class="my-4" size="large" color="purple" block>Login</v-btn>
+        <v-btn @click.prevent="login" class="my-4" size="large" color="success" block>Log in</v-btn>
     </v-form>
-    <p>Not yet a member? <span @click="$emit('signIn')" class="cursor-pointer text-blue-darken-4">Sign up</span> </p>
+    <p>New here? <span @click="$emit('signIn')" class="cursor-pointer text-blue-darken-4">Sign up</span> </p>
     </div>
 </template>
 
@@ -65,12 +65,13 @@ const login = async () => {
 //forgot
 const emitForgot = async () => {
     console.log("creeds", credentials.user_email);
-    if (!credentials.user_email) {
-        toggleAlert.value = true
-    } else {
-        toggleAlert.value = false
-        emit("forgot");
-    }
+    // if (!credentials.user_email) {
+    //     toggleAlert.value = true
+    // } else {
+    //     toggleAlert.value = false
+    //     emit("forgot");
+    // }
+    emit("forgot");
 };
 
 watch(credentials.pwd, (newVal) => {

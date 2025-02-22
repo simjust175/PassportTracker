@@ -1,15 +1,18 @@
 <template>
-  <h2 class="text-center mb-3">Register</h2>
+  <div>
+  <h2 class="text-center mb-3">Create your account</h2>
   <v-form ref="formData">
     <alert-prop :alert="activateAlert" type="error" label="User name or password are incorrect" :closable="true"/>
+    <register-input label="Enter Name" type="name"  @input="credentials.user_name = $event"/>
     <register-input label="Enter Email" type="email"  @input="credentials.user_email = $event"/>
     <register-input label="Enter password" type="pwd" @input="pwd1 = $event"/>
     <register-input label="Re-Enter password" type="pwd2" @input="pwd2 = $event" :pwd1="pwd1"/>
-    <v-btn size="large" color="purple" @click.prevent="register" block> Register</v-btn>
+    <v-btn size="large" color="success" @click.prevent="register" block>Get started</v-btn>
     <div class="mt-4">
       <p>Have a account? <span @click="this.$emit('login')" class="cursor-pointer text-blue-darken-4">Log in</span></p>
     </div>
   </v-form>
+</div>
 </template>
 
 <script setup>
@@ -34,6 +37,7 @@ const formData = ref(null);
 const pwd1 = ref("");
 const pwd2 = ref("");
 const credentials = reactive({
+  user_name: "",
   user_email: "",
   pwd: ""
 });

@@ -1,11 +1,11 @@
 <template>
     <v-text-field variant="outlined" :type="showPwdStat ? 'text' : 'password'" :append-inner-icon="showPwdIcon" :rules="rule"
-        :label="props.label" :prepend-inner-icon="icon" @click:append-inner="showPwdStat = !showPwdStat" class="mb-2" v-model="inputData" @input="emitData">
+        :label="props.label" :prepend-inner-icon="icon" @click:append-inner="showPwdStat = !showPwdStat" class="mb-2" v-model="inputData" @input="emitData" :active="false">
     </v-text-field>
 </template>
 
 <script setup>
-import { defineProps, defineEmits,  ref, reactive, computed } from "vue";
+import { ref, reactive, computed } from "vue";
 
 const rules = reactive({
   email: [
@@ -42,7 +42,8 @@ const emit = defineEmits([
 ])
 
 const iconList = {
-    email: "mdi-account-outline",
+    name: "mdi-account-outline",
+    email: "mdi-email-fast-outline",
     pwd: "mdi-lock-outline",
     pwd2: "mdi-lock"
 };

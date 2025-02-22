@@ -1,11 +1,12 @@
 <template>
- <v-container class="d-flex align-center justify-center fill-height" :theme="light" fluid>
-        <v-card class="px-10 py-10 bg-grey-lighten-6" width="380" max-width="440">
+ <v-container class="d-flex align-center justify-center" fluid>
+        <v-card class="px-10" :min-width="widthByScreen" elevation="0">
             <!-- <contact-main /> -->
-            <LoginForm v-if="loginActive" @signIn="loginActive = false" @forgotActive="forgot = $event"
-                v-bind="$attrs" />
-            <register-form v-else @login="loginActive = true" />
+            <register-form v-if="!hasAccount" @login="hasAccount = true" />
 
+            <LoginForm v-else @signIn="hasAccount = false" @forgotActive="forgot = $event"
+                v-bind="$attrs" />
+            
             <v-divider class="my-sm-8 mb-xs-0 mt-xs-8" v-if="!forgot">or</v-divider>
 
             <div v-if="!forgot">
@@ -16,22 +17,33 @@
     </v-container>
 </template>
 
-<script>
+<script setup>
 import LoginForm from "../RegisterForms/LoginForm.vue"
 import RegisterForm from '../RegisterForms/RegisterForm.vue'
-export default {
-    components: { LoginForm, RegisterForm },
-    props: {
-        loginTriggered: Boolean
-    },
-    data() {
-        return {
-            loginActive: false,
-            forgot: false
-        }
-    }
+import { ref, computed } from "vue"
+import { useDisplay } from 'vuetify'
+const { name } = useDisplay()
 
-}
+const props = defineProps({
+        loginTriggered: Boolean
+    })
+    
+const hasAccount = ref(true)
+const forgot = ref(false)
+
+
+const widthByScreen = computed(() => {
+    console.log(name.value)
+  switch (name.value) {
+    case 'xs':
+      return 350;
+    case 'sm':
+      return 450;
+    default:
+      return 500;
+  }
+});
+
 </script>
 
 <style></style>

@@ -7,26 +7,32 @@
       </div>
       <v-stepper-header class="shadow-none overflow-hidden py-5" elevation="0">
 
-        <v-divider :thickness="10" class="border-opacity-50 mt-10" inset :color="dividerColorFirst"></v-divider>
+        <v-divider :thickness="12" class="border-opacity-50 mt-11" inset :color="dividerColorFirst"></v-divider>
 
-        <v-stepper-item size="large" value="1" class="enlarged-item" style="width: 40px; height: 40px"
-          :complete="complete.first" :color="dividerColorFirst" icon="mdi-account">
+        <v-stepper-item value="1" class="opacity-100" id="first" :complete="complete.first" :color="dividerColorFirst"
+          icon="mdi-account">
           <template v-slot:title>Holder Information</template>
         </v-stepper-item>
 
-        <v-divider :thickness="10" class="border-opacity-50 mt-10" :color="dividerColorSecond"></v-divider>
+        <v-divider :thickness="12" class="border-opacity-50 mt-11" :color="dividerColorSecond"></v-divider>
 
-        <v-stepper-item value="2" :complete="complete.second" :color="dividerColorSecond" icon="mdi-passport">
+        <v-stepper-item value="2" class="second opacity-100" id="yay" :complete="complete.second"
+          :color="dividerColorSecond" icon="mdi-passport">
           <template v-slot:title>Document Information</template>
         </v-stepper-item>
+        <!-- <v-stepper-item  value="1" class="opacity-100"
+          :complete="complete.first" :color="dividerColorFirst" icon="mdi-account">
+          <template v-slot:title>Holder Information</template>
+        </v-stepper-item> -->
 
-        <v-divider :thickness="10" class="border-opacity-50 mt-10" :color="dividerColorThird"></v-divider>
+        <v-divider :thickness="12" class="border-opacity-50 mt-11" :color="dividerColorThird"></v-divider>
 
-        <v-stepper-item value="3" :complete="complete.third" :color="dividerColorThird" icon="mdi-content-save-outline">
+        <v-stepper-item value="3" class="third opacity-100" :complete="complete.third" :color="dividerColorThird"
+          icon="mdi-content-save-outline">
           <template v-slot:title>Save</template>
         </v-stepper-item>
 
-        <v-divider :thickness="10" class="border-opacity-50 mt-10" :color="dividerColorThird"></v-divider>
+        <v-divider :thickness="12" class="border-opacity-50 mt-11" :color="dividerColorThird"></v-divider>
 
       </v-stepper-header>
 
@@ -63,10 +69,11 @@
           </v-stepper-window-item>
         </v-stepper-window>
 
-        <v-stepper-actions :disabled="disabled" @click:prev="prev">
+        <v-stepper-actions :disabled="disabled" prepend-icon="mdi-arrow-left-bold-outline" @click:prev="prev">
           <template v-slot:next>
             <submit-btn v-if="step === 2" :checkedInfo="checkedInfo" :loadingState="loading" @click="checkInfo" />
-            <v-btn v-else @click="next" color="success" variant="flat" append-icon="mdi-arrow-right-bold-outline">Next</v-btn>
+            <v-btn v-else @click="next" color="success" variant="flat"
+              append-icon="mdi-arrow-right-bold-outline">Next</v-btn>
           </template>
         </v-stepper-actions>
       </div>
@@ -77,7 +84,7 @@
 
 
 <script setup>
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, onMounted, watch } from "vue";
 
 // Initial data and state
 const checkedInfo = ref({})
@@ -105,11 +112,43 @@ const complete = reactive({
   second: false,
   third: false
 });
-const dividerColorFirst = computed(() => step.value >= 0 ? 'success' : '')
-const dividerColorSecond = computed(() => step.value >= 1 ? 'success' : '')
-const dividerColorThird = computed(() => step.value >= 2 ? 'success' : '')
+
+const itemDefaultColor = () => {
+  // Ensures the DOM is updated after Vue renders the component
+  const vStepperItems = document.querySelectorAll('.v-stepper-item__avatar.v-avatar');
+  console.log("change", step.value);
+  vStepperItems.forEach((item, index) => {
+    let color;
+    switch (index) {
+      case 0:
+        color = dividerColorFirst.value;  // Get the value from computed dividerColorFirst
+        break;
+      case 1:
+        color = dividerColorSecond.value;  // Get the value from computed dividerColorSecond
+        break;
+      case 2:
+        color = dividerColorThird.value;  // Get the value from computed dividerColorThird
+        break;
+      default:
+        color = 'yellow';  // Default color if something goes wrong
+        break;
+    }
+    console.log(color);
+    item.style.setProperty('background-color', color, 'important');
+  }
+  );
+};
+
+onMounted(() => {
+  itemDefaultColor();
+});
+
+watch(step, () => itemDefaultColor())
+
+const dividerColorFirst = computed(() => step.value >= 0 ? '#5cb85c' : '#d8e1e7')
+const dividerColorSecond = computed(() => step.value >= 1 ? '#5cb85c' : '#d8e1e7')
+const dividerColorThird = computed(() => step.value >= 2 ? '#5cb85c' : '#d8e1e7')
 const disabled = ref(true); // Initially disable the both buttons
-const finished = ref(false)
 
 const checkInfo = () => {
   loading.value = true;
@@ -142,6 +181,7 @@ const disabledStat = (num) => {
     disabled.value = !complete.first ? true : 'prev';
   }
 };
+
 const next = () => {
   if (step.value <= 2) {
     step.value++
@@ -167,20 +207,22 @@ const clearForm = () => {
 </script>
 
 <style>
-div.v-avatar {
-  width: 40px !important;
-  height: 40px !important;
+.v-stepper-item__avatar.v-avatar {
+  width: 50px !important;
+  height: 50px !important;
+  z-index: 100 !important;
 }
 
 i {
   font-size: 22px !important;
+  color: white !important;
 }
 
 .shadow-none {
   box-shadow: none !important;
 }
 
-.v-stepper-header{
+.v-stepper-header {
   box-shadow: none !important;
 }
 
@@ -189,75 +231,3 @@ i {
   color: #4caf50 !important;
 }
 </style>
-
-<!-- <script setup>
-import { reactive, ref } from "vue";
-
-const loading = ref(false);
-const info = reactive({
-    user_name: {
-        first_name: "",
-        surname: "",
-        middle: ""
-    },
-    document: {
-        type: "",
-        country: "",
-        state: null,
-        date: "",
-        reminder_period: 'weekly',
-        six_months: false
-    }
-});
-
-// const isPassport = computed(() => info.type === 'Passport');
-
-const clearForm = () => {
-    Object.assign(info, {
-        user_name: {
-            first_name: "",
-            surname: "",
-            middle: ""
-        },
-        document: {
-            type: "",
-            country: "",
-            state: null,
-            date: "",
-            reminder_period: 'weekly',
-            six_months: false
-        }
-    });
-};
-
-const checkInfo = () => {
-    loading.value = true;
-    setTimeout(() => {
-        loading.value = false;
-        //clearForm();
-    }, 2000);
-};
-
-const step = ref(0);
-const submit = () => console.log("submited");
-//const items = ref(['Holder Details', 'Document Details', 'Save']);
-const disabled = ref(true)
-const finished = ref(false)
-const complete = reactive({
-    first: () => step.value > 0,
-    second: () => step.value > 1,
-    third: () => step.value > 2
-})
-
-const disabledStat = () => {
-    const stepNum = step.value;
-    if (!finished.value) {
-        disabled.value = stepNum === 1 ? true : 'next';
-    } else {
-        disabled.value = stepNum === 1 ? 'prev' : stepNum === 3 ? 'next' : false
-    }
-};
-const next = () => step.value < 2 ? (step.value++ && disabledStat()) : "";
-const prev = () => step.value >= 0 ? (step.value-- && disabledStat()) : "";
-
-</script> -->

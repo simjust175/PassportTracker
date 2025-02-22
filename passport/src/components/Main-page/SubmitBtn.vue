@@ -1,5 +1,5 @@
 <template>
-    <v-btn append-icon="mdi-send-outline" variant="flat" color="success" :loading="props.loadingState"> Confirm & Send</v-btn>
+    <v-btn append-icon="mdi-plus" variant="flat" color="success" :loading="props.loadingState"> Confirm & Save</v-btn>
 </template>
 
 <script setup>
@@ -28,6 +28,7 @@ const validateInfo = () => {
     postInfo(info)
 }
 
+//font color #5f6771 #f6f9fb
 let num = 0
 const postInfo = async(credentials) => {
     num ++

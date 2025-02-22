@@ -1,6 +1,6 @@
 <template>
   <div>
-  <v-navigation-drawer v-model="drawer" theme="light" :rail="rail" @click.stop="toggleRail" :permanent="true" :temporary="!rail">
+  <v-navigation-drawer v-model="drawer" theme="light" :rail="rail" @click.stop="toggleRail" :temporary="rail ? false : true" :location="locationByScreen">
     <!-- <v-list-item prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg" title="User name" nav> -->
       <!-- <template v-slot:append> -->
         <v-btn :icon="chevronIcon" variant="text" @click.stop="toggleRail"></v-btn>
@@ -26,54 +26,34 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { useRouter } from 'vue-router';
-const props = defineProps({ language: String })
 const router = useRouter();
 
-// import { useLocale } from 'vuetify'
-// const { t } = useLocale()
+import { useDisplay } from 'vuetify'
+const { name } = useDisplay()
+
 const activateDialog = ref(false)
 const emit = defineEmits(["updateLocale"]);
 const emitLocale = (lang) => emit("updateLocale", lang);
 
 const drawer = ref(true);
 const rail = ref(true);
-const chevronIcon = computed(() => `mdi-chevron-${props.language === 'he' ? 'right' : 'left'}`);
+const chevronIcon = computed(() => `mdi-chevron-left`);
 
 const toggleRail = () => {
   rail.value = !rail.value;
 };
 
-const titles = reactive({
-  table: {
-    he: "פרטים",
-    en: "Table"
-  },
-  charts: {
-    he: "הטבלאות שלי",
-    en: "My tables"
-  },
-  currency: {
-    he: "מטבע",
-    en: "Currency"
-  },
-  percent: {
-    he: "אחוזים",
-    en: "Percentage"
-  },
-  location: {
-    he: "מיקום",
-    en: "Location"
-  },
-  receipts: {
-    he: "קבלות",
-    en: "Receipts"
-  },
-  logout: {
-    he: "התנתקות",
-    en: "logout"
-  },
-
-})
+const locationByScreen = computed(() => {
+    console.log(name.value)
+  switch (name.value) {
+    case 'xs':
+      return 'bottom';
+    case 'sm':
+      return 'bottom';
+    default:
+      return 'left';
+  }
+});
 
 const openExpandedTable = () => {
   router.push('/table');
