@@ -17,10 +17,11 @@
 <script setup>
 import { ref, reactive, watch, defineEmits } from "vue";
 import { useRouter } from "vue-router";
-import store from "@/storage"
+const router = useRouter()
+
+import store from "@/Storage"
 
 const alertActivate = ref(false)
-const router = useRouter()
 const formData = ref("");
 const toggleAlert = ref(false);
 const credentials = reactive({
@@ -47,16 +48,18 @@ const login = async () => {
         body: JSON.stringify(credentials)
     });
     try {
-        const {  newToken: {user_id, newToken: { token} } } = await res.json();
-        console.log("userid", user_id);
-        if (!token) return alertActivate.value = true;
-        localStorage.setItem("token", token);
-        localStorage.setItem("id", user_id);
-        
-    store.commit("updateLoggedStat", { loggedInStatus: true, userName: credentials.user_email })
+        //const {  newToken: {user_id, newToken: { token} } } = await res.json();
+        const { newToken } = await res.json();
+        console.log("new-token", newToken)
+        if (!newToken.newToken.token) return alertActivate.value = true;
+        localStorage.clear()
+        localStorage.setItem("token", newToken.newToken.token);
+        localStorage.setItem("user_id", newToken.user_id);
+        store.commit("updatedLoginStat", { loggedInStatus: true, userName: newToken.user_name, userInfo: {...credentials} })
         emit("loggedIn");
         router.push("/");
     } catch (error) {
+        console.log("we encountered an ERROR while LOGGING IN:", error)
         alertActivate.value = true;
     }
 
