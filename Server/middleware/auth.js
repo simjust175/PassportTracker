@@ -7,6 +7,7 @@ const auth = (req, res, next) => {
     if(!token) throw new Error(`at Auth: not authorized, no token provided`);
     
     try {
+        console.log("token", token);
         token = token.replace('Bearer ', '');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         console.log(decoded);

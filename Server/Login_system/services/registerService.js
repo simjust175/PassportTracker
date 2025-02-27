@@ -31,36 +31,35 @@ class RegisterService {
         const isDataValid = await Register.validateUserData(body);
         const dataFromDB = await Register.getByEmail(body);
         if (!isDataValid || dataFromDB.length === 0) throw new Error("invalid user name");
-        const [{ user_email, pwd, user_id }] = dataFromDB;
+        const [{ user_name, user_email, pwd, user_id }] = dataFromDB;
         try {
             const isCredentialsValid = await bcrypt.compare(body.pwd, pwd);
             console.log("validity", isCredentialsValid);
             if (!isCredentialsValid) return null;
             const newToken = { token: await Register.GenerateToken(user_email, pwd), active: true };
             await Register.patchUser(user_id, newToken);
-            return { newToken, user_id };
+            return { newToken, user_id, user_name };
         } catch (error) {
             throw new Error(error);
         }
     };
 
     static async logoutUser(params) {
-        if (!params.user_email) throw new Error("email must be provided")
+        //if (!params.user_email) throw new Error("email must be provided")
+        if (!params.user_id) throw new Error("email must be provided")
         try {
-            const { user_id } = await Register.getByEmail(params)
-            const setStatusAsInactive = await Register.patchUser(user_id, {active: false})
-            const removeToken = await Register.patchUser(user_id, { token: "" });
-            console.log("user status:", setStatusAsInactive);
+            //const { user_id } = await Register.getByEmail(params)
+            const removeToken = await Register.patchUser(params.user_id, { token: "" });
             return removeToken;
         } catch (error) {
             throw new Error(error);
         }
     }
 
-    static async verifyLoggedInService({ user_email, token }) {
-        if (!user_email || !token) throw new Error("You must be logged in to access info.")
+    static async verifyLoggedInService({ user_id, token }) {
+        if (!user_id || !token) throw new Error("You must be logged in to access info.")
         try {
-            const isTokenValid = await Register.verifyLoggedInByToken(user_email, token);
+            const isTokenValid = await Register.verifyLoggedInByToken(user_id, token);
             console.log("is the token valid: ", isTokenValid.length > 1);
             if (isTokenValid.length < 1) return null;
             console.log("its valid: ", isTokenValid);

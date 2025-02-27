@@ -33,7 +33,7 @@ const props = defineProps({
     info: Object,
 });
 
-const emit = defineEmits(["confirmed"]);
+const emit = defineEmits(["confirmed", "edit"]);
 
 const userInfo = ref({});
 const hoverIcon = ref(false);
@@ -58,14 +58,22 @@ watch(
     { immediate: true }
 );
 
+const stepByKey = (key) => {
+    switch (key) {
+        case 'surname':
+          case  'middle':
+          case  'first_name':
+            return 0;   
+        default:
+            return 1;
+    }
+}
 const editItem = (key) => {
-    console.log(`Editing item: ${key}`);
-    // Add your edit logic here (e.g., emit an event, open a dialog)
+    emit('edit', stepByKey(key));
 };
 </script>
 
 <style scoped>
-/* Table and overall sheet styling */
 .v-sheet {
     background-color: #ffffff;
     border-radius: 10px;

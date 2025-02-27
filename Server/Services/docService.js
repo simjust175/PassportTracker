@@ -31,7 +31,7 @@ class DocService {
     }
 
     static async getService({token}) {
-        const [{user_id}] = await Doc.ValidateByToken(token);
+        const [{user_id}] = await Doc.ValidateByToken(token); //no need since i am using middleware (delete)
         if (!user_id) throw new Error("not the correct user");
         try {
             const getDocs = await Doc.GetDocs(user_id);

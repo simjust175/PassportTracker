@@ -1,6 +1,6 @@
 <template>
- <v-container class="d-flex align-center justify-center" fluid>
-        <v-card class="px-10" :min-width="widthByScreen" elevation="0">
+ <v-container class="d-flex align-center bg-transparent justify-center" fluid>
+        <v-card class="px-10 bg-transparent" :min-width="widthByScreen" elevation="0">
             <!-- <contact-main /> -->
             <register-form v-if="!hasAccount" @login="hasAccount = true" />
 

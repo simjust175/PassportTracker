@@ -21,7 +21,7 @@
         <v-btn class="text-none" rounded="xl" text="Cancel" @click="emitCancel"></v-btn>
 
         <v-btn class="text-none" color="primary" rounded="lg" text="OK" variant="outlined"
-          @click="emitConfirmed"></v-btn>
+          @click="confirmLogout"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -30,7 +30,9 @@
 
 <script setup>
 import { ref, watch } from "vue";
-const emit = defineEmits(["confirm", "cancel", "loggedOut"]);
+import { setLogin } from "@/stores/loginState"
+const loginInfo = setLogin()
+const emit = defineEmits(["cancel", "loggedOut"]);
 
 const props = defineProps({
   activateDialog: Boolean,
@@ -38,17 +40,22 @@ const props = defineProps({
   text: String,
 });
 const logout = async()=> {
-    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/register/logout/${localStorage.getItem("user_email")}`) 
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/register/logout/${localStorage.getItem("user_id")}`,{
+      method: "POST"
+    }
+  ) 
     const data = await res.json()
     emit("loggedOut")
     localStorage.clear()
-    console.log("is localStorage clear:", localStorage)
+    loginInfo.$reset()
+    console.log("what sin Pinia state", loginInfo)
+    console.log("is localStorage clear:", localStorage, "how about the store?", store.state)
     console.log("logged out", data)
 }
 
 //const dialog = computed(()=> props.activateDialog);
 const dialog = ref(false);
-const emitConfirmed = () => {
+const confirmLogout = () => {
   dialog.value = false
   logout()
  

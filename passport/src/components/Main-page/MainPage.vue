@@ -1,29 +1,29 @@
 <template v-slot:default="{ prev, next }">
   <v-card min-width="800" class="rounded-lg" elevation="4" fluid>
+    <v-btn @click="clearForm()" prepend-icon="mdi-delete">Clear</v-btn>
+
     <v-stepper v-model="step" elevation="0" alt-labels>
+
       <div class="pt-9 text d-flex flex-column align-center">
         <h2>Add Your Document</h2>
         <h4 class="text-grey-darken-1">Please Enter Your Information</h4>
       </div>
+
       <v-stepper-header class="shadow-none overflow-hidden py-5" elevation="0">
 
         <v-divider :thickness="12" class="border-opacity-50 mt-11" inset :color="dividerColorFirst"></v-divider>
 
         <v-stepper-item value="1" class="opacity-100" id="first" :complete="complete.first" :color="dividerColorFirst"
-          icon="mdi-account">
+          icon="mdi-account-outline">
           <template v-slot:title>Holder Information</template>
         </v-stepper-item>
 
         <v-divider :thickness="12" class="border-opacity-50 mt-11" :color="dividerColorSecond"></v-divider>
 
-        <v-stepper-item value="2" class="second opacity-100" id="yay" :complete="complete.second"
+        <v-stepper-item value="2" class="second opacity-100"  :complete="complete.second"
           :color="dividerColorSecond" icon="mdi-passport">
           <template v-slot:title>Document Information</template>
         </v-stepper-item>
-        <!-- <v-stepper-item  value="1" class="opacity-100"
-          :complete="complete.first" :color="dividerColorFirst" icon="mdi-account">
-          <template v-slot:title>Holder Information</template>
-        </v-stepper-item> -->
 
         <v-divider :thickness="12" class="border-opacity-50 mt-11" :color="dividerColorThird"></v-divider>
 
@@ -64,7 +64,7 @@
             <h3 class="text-h6">Confirmation</h3>
             <br />
             <v-sheet>
-              <final-details :info="info" @confirmed="checkedInfo = $event" />
+              <final-details :info="info" @confirmed="checkedInfo = $event" @edit="step= $event"/>
             </v-sheet>
           </v-stepper-window-item>
         </v-stepper-window>
@@ -91,7 +91,7 @@ const checkedInfo = ref({})
 const loading = ref(false);
 const info = reactive({
   user_name: {
-    first_name: "",
+    first_name: "", 
     surname: "",
     middle: ""
   },
@@ -105,6 +105,7 @@ const info = reactive({
   }
 });
 
+watch(info, ()=> info)
 // Step tracking
 const step = ref(0);
 const complete = reactive({
@@ -121,19 +122,18 @@ const itemDefaultColor = () => {
     let color;
     switch (index) {
       case 0:
-        color = dividerColorFirst.value;  // Get the value from computed dividerColorFirst
+        color = dividerColorFirst.value; 
         break;
       case 1:
-        color = dividerColorSecond.value;  // Get the value from computed dividerColorSecond
+        color = dividerColorSecond.value;
         break;
       case 2:
-        color = dividerColorThird.value;  // Get the value from computed dividerColorThird
+        color = dividerColorThird.value;
         break;
       default:
         color = 'yellow';  // Default color if something goes wrong
         break;
     }
-    console.log(color);
     item.style.setProperty('background-color', color, 'important');
   }
   );
@@ -202,6 +202,8 @@ const clearForm = () => {
     user_name: { first_name: "", surname: "", middle: "" },
     document: { type: "", country: "", state: null, date: "", reminder_period: 'weekly', six_months: false }
   });
+  console.log("cleared object", info);
+  step.value = 0
 };
 
 </script>
@@ -213,8 +215,8 @@ const clearForm = () => {
   z-index: 100 !important;
 }
 
-i {
-  font-size: 22px !important;
+.v-stepper-item__avatar.v-avatar i {
+  font-size: 23px !important;
   color: white !important;
 }
 

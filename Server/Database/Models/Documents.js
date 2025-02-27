@@ -27,10 +27,11 @@ class Doc{
     }
 
     static async GetDocs(user_id, optionalWhere){
-        const SELECT_docs = `SELECT * FROM documents WHERE user = ? AND ${isNotDeleted} ${optionalWhere}`;
+        console.log("user_id", user_id);
+        optionalWhere ? optionalWhere : ''
+        const SELECT_docs = `SELECT * FROM documents WHERE user = ? AND ${isNotDeleted} ${optionalWhere ? optionalWhere : ';'}`;
         console.log("sql code", SELECT_docs);
         const [docSelected, _] = await db.query(SELECT_docs, [user_id]);
-        console.log('sql', docSelected);
         return docSelected;
     }
 

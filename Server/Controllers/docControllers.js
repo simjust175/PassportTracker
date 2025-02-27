@@ -12,10 +12,10 @@ class DocControllers {
         }
     }
 
-    static async getDoc({ body }, res) {
-        if (!body) return res.status(400).json({ msg: 'Error in Docervices/getDocervice' });
+    static async getDoc({ params }, res) {
+        if (!params) return res.status(400).json({ msg: 'Error in Docervices/getDocervice' });
         try {
-            const doc = await DocService.getService(body);
+            const doc = await DocService.getService(params);
             if (!doc) return res.status(404).json({ msg: 'Error in DocServices/getDocService' });
             res.status(200).json({ Success: `Doc retrieved successfully`, doc });
         } catch (error) {

@@ -1,6 +1,6 @@
 <template>
     <main theme="light">
-        <v-btn icon="mdi-close" size="x-large" variant="plain" class="position-absolute top-0 left-0" @click="router.push('/')"></v-btn>
+        <!-- <v-btn icon="mdi-close" size="x-large" variant="plain" class="position-absolute top-0 left-0" @click="router.push('/')"></v-btn> -->
         <RegisterMain />
     </main>
 </template>

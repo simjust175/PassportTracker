@@ -3,12 +3,12 @@ import express from "express";
 const route = express.Router();
 
 import DocControllers from "../Controllers/docControllers.js";
-//import auth from "../middleware/auth.js"
+import auth from "../middleware/auth.js"
 
 
 route.post("/post/:token", DocControllers.postDoc);
 
-route.get("/get/:token", DocControllers.getDoc);
+route.get("/get/:token", auth, DocControllers.getDoc);
 
 route.get("/todays/:date", DocControllers.getTodaysDoc);
 

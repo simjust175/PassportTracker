@@ -1,30 +1,30 @@
 <template>
   <div>
-  <v-navigation-drawer v-model="drawer" theme="light" :rail="rail" @click.stop="toggleRail" :temporary="rail ? false : true" :location="locationByScreen">
-    <!-- <v-list-item prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg" title="User name" nav> -->
-      <!-- <template v-slot:append> -->
-        <v-btn :icon="chevronIcon" variant="text" @click.stop="toggleRail"></v-btn>
-      <!-- </template> -->
-    <!-- </v-list-item> -->
+    <v-navigation-drawer v-model="drawer" theme="light" :rail="locationByScreen === 'left' ? rail : false" @click.stop="toggleRail" :location="locationByScreen" :permanent="locationByScreen == 'left'"
+      :temporary="locationByScreen === 'bottom'">
 
-    <v-divider></v-divider>
+      <v-btn :icon="chevronIcon" variant="text" @click.stop="toggleRail" v-if="locationByScreen === 'left'"></v-btn>
 
-    <v-list density="compact" nav>
-      <v-list-item prepend-icon="mdi-calendar" title="Calendar" value="calendar"></v-list-item>
-      <v-list-item prepend-icon="mdi-bell" title="My reminders" value="reminders"></v-list-item>
-      <v-list-item prepend-icon="mdi-cog" title="Settings" value="currency"></v-list-item>
-    </v-list>
-    <template v-slot:append>
-        <v-list-item prepend-icon="mdi-export" title="Logout" value="logout" class="bg-green mx-1 mb-1" rounded="lg"></v-list-item>
+      <v-divider></v-divider>
+
+      <v-list density="compact" nav>
+        <v-list-item prepend-icon="mdi-list-box-outline" title="Form" value="form" @click="$router.push('/')"></v-list-item>
+        <v-list-item prepend-icon="mdi-calendar" title="Calendar" value="calendar" @click="$router.push('/calendar')"></v-list-item>
+        <v-list-item prepend-icon="mdi-bell-outline" title="My reminders" value="reminders" @click="$router.push('/reminders')"></v-list-item>
+        <v-list-item prepend-icon="mdi-cog-outline" title="Settings" value="currency"></v-list-item>
+      </v-list>
+      <template v-slot:append>
+        <v-list-item prepend-icon="mdi-export" title="Logout" value="logout" class="bg-green"
+          rounded="lg" @click="activateDialog = true"></v-list-item>
       </template>
-  </v-navigation-drawer>
-  <main-dialog :activateDialog="activateDialog" title="Confirm Log-out" text="confirm_dialog" @confirm="logout" />
-</div>
+    </v-navigation-drawer>
+    <logout-dialog :activateDialog="activateDialog" title="Confirm Log-out" text="Are you sure?"  @cancel="activateDialog = false" v-bind="$attrs"/>
+  </div>
 
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 const router = useRouter();
 
@@ -32,19 +32,22 @@ import { useDisplay } from 'vuetify'
 const { name } = useDisplay()
 
 const activateDialog = ref(false)
-const emit = defineEmits(["updateLocale"]);
-const emitLocale = (lang) => emit("updateLocale", lang);
+const emit = defineEmits(["updateLocale", "screenChange"]);
+const props = defineProps({
+  drawerOpen: Boolean
+})
 
-const drawer = ref(true);
+const activeItem = ref('')
+const drawer = ref(true)
+//const drawer = computed(()=> locationByScreen === 'left' ? true : false);
 const rail = ref(true);
-const chevronIcon = computed(() => `mdi-chevron-left`);
+const chevronIcon = computed(() => rail.value ? `mdi-chevron-right` : `mdi-chevron-left`);
 
 const toggleRail = () => {
   rail.value = !rail.value;
 };
 
 const locationByScreen = computed(() => {
-    console.log(name.value)
   switch (name.value) {
     case 'xs':
       return 'bottom';
@@ -55,12 +58,11 @@ const locationByScreen = computed(() => {
   }
 });
 
-const openExpandedTable = () => {
-  router.push('/table');
-  rail.value = false;
-};
-
-const currencyDropDownStat = ref(false);
+watch(()=> props.drawerOpen, (newVal)=> drawer.value = newVal)
+watch(locationByScreen, (newVal)=> emit("screenChange", newVal === 'bottom'))
+onMounted(()=>{ 
+  emit("screenChange", locationByScreen.value === 'bottom')
+})
 </script>
 
 <style>

@@ -19,6 +19,7 @@ class RegisterControllers{
             try {
                const newToken = await RegisterService.loginUser(body);
                 if (!newToken) return res.status(401).json({ Error : "Auth failed." });
+                console.log("info from service", newToken);
                 res.status(200).json({ Success: "Auth successful" , newToken});
             } catch (error) {
                 res.status(500).json({ Error : `userService/userLoginService: Cannot login ${error.message}` });

@@ -24,7 +24,7 @@ const loading = ref(false)
 const loggedIn = ref(false)
 const loggedInInfo = {
   user_id: localStorage.getItem("user_id"),
-  token: localStorage.getItem("token"),
+  token: store.state.token
 };
 
 
@@ -42,16 +42,17 @@ async function validateToken() {
   return isTokenValid.Success ? true : false;
 }
 
-function isTokenExpired(token) {
-  const decoded = JSON.parse(atob(token.split('.')[1])); // Decode the JWT
-  const expiry = decoded.exp * 1000; // Convert to milliseconds
-  return Date.now() > expiry; // Check if the token is expired
-}
+// function isTokenExpired(token) {
+//   const decoded = JSON.parse(atob(token.split('.')[1])); // Decode the JWT
+//   const expiry = decoded.exp * 1000; // Convert to milliseconds
+//   return Date.now() > expiry; // Check if the token is expired
+// }
 
 
 onMounted(async () => {
   // Check if token has been validated before
-  const isExpired = isTokenExpired(localStorage.getItem("token"))
+  //const isExpired = isTokenExpired(store.state.token)
+  const isExpired = 1 === 2 //Just while i test some things
   
   const isTokenValidated = localStorage.getItem("isTokenValidated");
   if (isTokenValidated === "true") {
@@ -66,7 +67,6 @@ onMounted(async () => {
   } else {
     loggedIn.value = true;
     localStorage.setItem("isTokenValidated", "true");
-    store.commit("updatedLoginStat", true, loggedInInfo.user_id);
   }
 
   loading.value = true;

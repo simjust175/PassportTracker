@@ -11,7 +11,6 @@ class Register {
     static async getByEmail(body) {
         const sql = `SELECT * FROM users where user_email = ?`;
         const [userNameAvailable, _] = await db.query(sql, [body.user_email]);
-        console.log("userAvailible", userNameAvailable);
         return userNameAvailable;
     };
 
@@ -19,6 +18,7 @@ class Register {
         const user = Object.entries(body)
         const patch = user.map(entry => `${entry[0]} = ${typeof entry[1] === 'string' ? `"${entry[1]}"` : entry[1]}`).join(" ,");
         const sql = `UPDATE users SET ${patch} WHERE user_id = ?`;
+        console.log("patch", sql);
         const [patchedUser, _] = await db.query(sql, [id]);
         return patchedUser;
     }
@@ -28,6 +28,7 @@ class Register {
     //JOI
     static async validateUserData(body) {
         const registerSchema = joi.object({
+            user_name: joi.string().required(),
             user_email: joi.string().email().required(),
             pwd: joi.required()
         })
@@ -63,9 +64,9 @@ class Register {
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-    static async verifyLoggedInByToken(user_email, token){
-        const sql = "SELECT user_email, token FROM users WHERE user_email = ? AND token = ?"
-        const [tokenIsValid, _] = await db.query(sql, [user_email, token]);
+    static async verifyLoggedInByToken(user_id, token){
+        const sql = "SELECT user_id, token FROM users WHERE user_id = ? AND token = ?"
+        const [tokenIsValid, _] = await db.query(sql, [user_id, token]);
         return tokenIsValid;
     }
 
