@@ -138,6 +138,8 @@ const sendMail = (info) => {
     console.log("Error", err))
 }
 
+
+// example TEST!
 const info = {
   id: 15,
   user_email: 'bunim175@gmail.com',

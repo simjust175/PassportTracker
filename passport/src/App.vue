@@ -1,38 +1,44 @@
 <template>
-  <v-app theme="light" class="pb-0 bg-grey-blue">
+  <v-app
+    theme="light"
+    class="pb-0 bg-grey-blue"
+  >
     <!-- <logout-dialog :activateDialog="true" title="Confirm Log-out" text="Are you sure?" @loggedOut="loader()"/> -->
     <navigation-bar
-      @loggedOut="loader()"
-      :drawerOpen="drawer"
-      @screenChange="isScreenSmall = $event"
       v-if="loginInfo.token"
+      :drawer-open="drawer"
+      @logged-out="loader()"
+      @screen-change="isScreenSmall = $event"
     />
     <div
+      v-if="loginInfo.token"
       class="d-flex justify-space-between"
       :class="{ 'flex-row-reverse': !isScreenSmall }"
-      v-if="loginInfo.token"
     >
       <v-btn
+        v-if="isScreenSmall"
         icon="mdi-dots-horizontal"
         class="mt-2 ml-4"
         variant="outlined"
         @click="drawer = !drawer"
-        v-if="isScreenSmall"
-      ></v-btn>
+      />
       <avatar-component class="mt-1 mr-4" />
     </div>
     <v-main class="d-flex align-center justify-center mt-10 pb-8">
       <v-progress-circular
+        v-if="loading"
         class="position-absolute"
         color="success"
         indeterminate
         :size="80"
         :width="3"
-        v-if="loading"
-      ></v-progress-circular>
-      <router-view @loggedOut="loader()" />
+      />
+      <router-view @logged-out="loader()" />
     </v-main>
-    <footer-comp height="2" class="pa-0 pb-0" />
+    <footer-comp
+      height="2"
+      class="pa-0 pb-0"
+    />
   </v-app>
 </template>
 
@@ -60,6 +66,10 @@ const loader = () => {
 <style>
 .bg-grey-blue {
   background-color: #f3faffff !important;
+}
+
+.secondary-color {
+  background-color: purple;
 }
 
 input:-webkit-autofill,

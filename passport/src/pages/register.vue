@@ -1,8 +1,8 @@
 <template>
-    <main theme="light">
-        <!-- <v-btn icon="mdi-close" size="x-large" variant="plain" class="position-absolute top-0 left-0" @click="router.push('/')"></v-btn> -->
-        <RegisterMain />
-    </main>
+  <main theme="light">
+    <!-- <v-btn icon="mdi-close" size="x-large" variant="plain" class="position-absolute top-0 left-0" @click="router.push('/')"></v-btn> -->
+    <RegisterMain />
+  </main>
 </template>
 
 <script setup>
@@ -13,6 +13,7 @@ import RegisterMain from '@/components/RegisterForms/RegisterMain.vue';
 
 const router = useRouter();
 const theme = useTheme();
+
 </script>
 
 <style></style>

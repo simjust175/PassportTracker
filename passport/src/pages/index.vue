@@ -1,9 +1,19 @@
 <template>
   <div class="d-flex flex-column">
-    <snack-bar banner="true" color="success" label="Document Successfully added"/>
+    <snack-bar
+      banner="true"
+      color="success"
+      label="Document Successfully added"
+    />
     <!-- <v-card class="rounded-6 elevation-5 mt-8"> -->
-      <v-progress-circular color="success" indeterminate :size="150" :width="8" v-if="loading"></v-progress-circular>
-      <main-page v-else/>
+    <v-progress-circular
+      color="success"
+      indeterminate
+      :size="150"
+      :width="8"
+      v-if="loading"
+    ></v-progress-circular>
+    <main-page v-else />
     <!-- </v-card> -->
     <div class="mt-4 d-flex align-center justify-center" v-if="!loading">
       <drag-file />
@@ -12,31 +22,34 @@
 </template>
 
 <script setup>
-import MainPage from "../components/Main-page/MainPage.vue"
+import MainPage from "../components/Main-page/MainPage.vue";
 import { onMounted, ref } from "vue";
 
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 const router = useRouter();
 
-import store from "@/Storage";
+import { setLogin } from "@/stores/loginState";
+const loginInfo = setLogin();
 
-const loading = ref(false)
-const loggedIn = ref(false)
+const loading = ref(false);
+const loggedIn = ref(false);
 const loggedInInfo = {
   user_id: localStorage.getItem("user_id"),
-  token: store.state.token
+  token: loginInfo.token,
 };
-
 
 //behind the scenes extra validation
 async function validateToken() {
-  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/register/validateToken`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(loggedInInfo),
-  });
+  const res = await fetch(
+    `${import.meta.env.VITE_BASE_URL}/register/validateToken`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loggedInInfo),
+    }
+  );
   const isTokenValid = await res.json();
   console.log("is the token valid:", isTokenValid.Success ? true : false);
   return isTokenValid.Success ? true : false;
@@ -45,15 +58,15 @@ async function validateToken() {
 // function isTokenExpired(token) {
 //   const decoded = JSON.parse(atob(token.split('.')[1])); // Decode the JWT
 //   const expiry = decoded.exp * 1000; // Convert to milliseconds
+//   console.log("expiry of token: decoded,", decoded, "expiry", expiry)
 //   return Date.now() > expiry; // Check if the token is expired
 // }
 
-
 onMounted(async () => {
   // Check if token has been validated before
-  //const isExpired = isTokenExpired(store.state.token)
-  const isExpired = 1 === 2 //Just while i test some things
-  
+  // const isExpired = isTokenExpired(loginInfo.token)
+  const isExpired = 1 === 2; //Just while i test some things
+
   const isTokenValidated = localStorage.getItem("isTokenValidated");
   if (isTokenValidated === "true") {
     loggedIn.value = true;
@@ -62,7 +75,7 @@ onMounted(async () => {
 
   const isValid = await validateToken();
   if (isExpired || !isValid) {
-    console.log("Did the token expire:", isExpired)
+    console.log("Did the token expire:", isExpired);
     router.push("/register");
   } else {
     loggedIn.value = true;
@@ -74,5 +87,4 @@ onMounted(async () => {
     loading.value = false;
   }, 2000);
 });
-
 </script>
